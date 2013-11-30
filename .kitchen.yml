@@ -1,0 +1,23 @@
+---
+driver_plugin: vagrant
+driver_config:
+  require_chef_omnibus: false
+
+platforms:
+- name: debian-wheezy
+  driver_config:
+    box: debian-wheezy
+    box_url: http://projects.tsuntsun.net/~nabeken/boxes/vagrant-debian-wheezy.box
+  run_list:
+  - recipe[apt]
+  - recipe[debian]
+
+suites:
+- name: imapd-ldap
+  encrypted_data_bag_secret_key_path: test/integration/secret_key
+  run_list:
+  - recipe[dovecot::imapd]
+  - recipe[dovecot::ldap]
+  - recipe[minitest-handler]
+  attributes:
+    dovecot: "attribute"

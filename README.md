@@ -1,0 +1,1 @@
+[![Build Status](https://travis-ci.org/tknetworks-cookbooks/dovecot.png?branch=master)](https://travis-ci.org/tknetworks-cookbooks/dovecot)
