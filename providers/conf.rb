@@ -27,9 +27,9 @@ action :create do
       mode 0644
       source "conf.d/#{new_resource.name}.conf.erb"
       cookbook node['dovecot']['conf_cookbook']
-      action :create
     end
   end
+  res.run_action(:create)
   new_resource.updated_by_last_action(res.updated_by_last_action?)
 end
 
@@ -40,5 +40,6 @@ action :remove do
       action :delete
     end
   end
+  res.run_action(:delete)
   new_resource.updated_by_last_action(res.updated_by_last_action?)
 end
