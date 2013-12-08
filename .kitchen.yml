@@ -20,4 +20,9 @@ suites:
   - recipe[dovecot::ldap]
   - recipe[minitest-handler]
   attributes:
-    dovecot: "attribute"
+    dovecot:
+      tls_ca_cert_file: "/etc/ssl/hoge.pem"
+      ldap:
+        uris:
+        - ldaps://ldap.example.org
+        base: "dc=mail, dc=example, dc=org"

@@ -15,3 +15,4 @@
 #
 default['dovecot']['dir'] = '/etc/dovecot'
 default['dovecot']['conf_cookbook'] = 'dovecot'
+default['dovecot']['tls_ca_cert_file'] = nil

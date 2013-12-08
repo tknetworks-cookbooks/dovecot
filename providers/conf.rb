@@ -29,7 +29,20 @@ action :create do
       cookbook node['dovecot']['conf_cookbook']
     end
   end
-  res.run_action(:create)
+
+  retried = false
+  begin
+    res.run_action(:create)
+  rescue
+    if retried
+      raise
+    else
+      Chef::Log.info "cookbook #{node['dovecot']['conf_cookbook']} has no template for #{res.path}. falling back to dovecot's template"
+      res.cookbook = 'dovecot'
+      retried = true
+      retry
+    end
+  end
   new_resource.updated_by_last_action(res.updated_by_last_action?)
 end
 

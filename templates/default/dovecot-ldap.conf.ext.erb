@@ -18,7 +18,7 @@
 
 # LDAP URIs to use. You can use this instead of hosts list. Note that this
 # setting isn't supported by all LDAP libraries.
-#uris = 
+uris = <%= node['dovecot']['ldap']['uris'].join(' ') %>
 
 # Distinguished Name - the username used to login to the LDAP server.
 # Leave it commented out to bind anonymously (useful with auth_bind=yes).
@@ -40,9 +40,11 @@
 #sasl_authz_id =
 
 # Use TLS to connect to the LDAP server.
-#tls = no
+tls = <%= node['dovecot']['ldap']['tls'] ? 'yes' : 'no' %>
 # TLS options, currently supported only with OpenLDAP:
-#tls_ca_cert_file =
+<% if node['dovecot']['tls_ca_cert_file'] -%>
+tls_ca_cert_file = <%= node['dovecot']['tls_ca_cert_file'] %>
+<% end -%>
 #tls_ca_cert_dir =
 #tls_cipher_suite =
 # TLS cert/key is used only if LDAP server requires a client certificate.
@@ -64,7 +66,7 @@
 # The pass_filter is used to find the DN for the user. Note that the pass_attrs
 # is still used, only the password field is ignored in it. Before doing any
 # search, the binding is switched back to the default DN.
-#auth_bind = no
+auth_bind = <%= node['dovecot']['ldap']['auth_bind'] ? 'yes' : 'no' %>
 
 # If authentication binding is used, you can save one LDAP request per login
 # if users' DN can be specified with a common template. The template can use
@@ -83,17 +85,17 @@
 #auth_bind_userdn =
 
 # LDAP protocol version to use. Likely 2 or 3.
-#ldap_version = 3
+ldap_version = <%= node['dovecot']['ldap']['ldap_version'] %>
 
 # LDAP base. %variables can be used here.
 # For example: dc=mail, dc=example, dc=org
-base =
+base = <%= node['dovecot']['ldap']['base'] %>
 
 # Dereference: never, searching, finding, always
 #deref = never
 
 # Search scope: base, onelevel, subtree
-#scope = subtree
+scope = <%= node['dovecot']['ldap']['scope'] %>
 
 # User attributes are given in LDAP-name=dovecot-internal-name list. The
 # internal names are:
@@ -104,14 +106,14 @@ base =
 #
 # There are also other special fields which can be returned, see
 # http://wiki2.dovecot.org/UserDatabase/ExtraFields
-#user_attrs = homeDirectory=home,uidNumber=uid,gidNumber=gid
+user_attrs = <%= node['dovecot']['ldap']['user_attrs'] %>
 
 # Filter for user lookup. Some variables can be used (see
 # http://wiki2.dovecot.org/Variables for full list):
 #   %u - username
 #   %n - user part in user@domain, same as %u if there's no domain
 #   %d - domain part in user@domain, empty if user there's no domain
-#user_filter = (&(objectClass=posixAccount)(uid=%u))
+user_filter = <%= node['dovecot']['ldap']['user_filter'] %>
 
 # Password checking attributes:
 #  user: Virtual user name (user@domain), if you wish to change the
@@ -119,7 +121,7 @@ base =
 #  password: Password, may optionally start with {type}, eg. {crypt}
 # There are also other special fields which can be returned, see
 # http://wiki2.dovecot.org/PasswordDatabase/ExtraFields
-#pass_attrs = uid=user,userPassword=password
+pass_filter = <%= node['dovecot']['ldap']['pass_filter'] %>
 
 # If you wish to avoid two LDAP lookups (passdb + userdb), you can use
 # userdb prefetch instead of userdb ldap in dovecot.conf. In that case you'll
