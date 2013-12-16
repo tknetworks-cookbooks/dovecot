@@ -33,7 +33,19 @@ describe 'dovecot::conf_auth' do
   end
 
   it "configures auth.conf" do
-    expect(chef_run).to create_template("#{chef_run.node['dovecot']['dir']}/conf.d/10-auth.conf")
+    [
+      "!include auth-system.conf.ext",
+      "auth_mechanisms = plain"
+    ].each do |l|
+      expect(chef_run).to render_file("#{chef_run.node['dovecot']['dir']}/conf.d/10-auth.conf")
+      .with_content(l)
+      expect(chef_run).to create_template("#{chef_run.node['dovecot']['dir']}/conf.d/10-auth.conf")
+      .with(
+        user: 'root',
+        group: 'root',
+        mode: 0644
+      )
+    end
   end
 
   it 'restart dovecot service' do

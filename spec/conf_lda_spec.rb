@@ -29,11 +29,20 @@ describe 'dovecot::conf_lda' do
   }
 
   before do
+    chef_run.node.set['dovecot']['conf']['lda']['mail_plugins'] = %w{sieve}
     chef_run.converge('dovecot::conf_lda')
   end
 
   it "configures lda.conf" do
+    expect(chef_run).to render_file("#{chef_run.node['dovecot']['dir']}/conf.d/15-lda.conf")
+    .with_content('mail_plugins = sieve')
+
     expect(chef_run).to create_template("#{chef_run.node['dovecot']['dir']}/conf.d/15-lda.conf")
+    .with(
+      user: 'root',
+      group: 'root',
+      mode: 0644
+    )
   end
 
   it 'restart dovecot service' do

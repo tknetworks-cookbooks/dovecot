@@ -34,6 +34,11 @@ describe 'dovecot::conf_master' do
 
   it "configures master.conf" do
     expect(chef_run).to create_template("#{chef_run.node['dovecot']['dir']}/conf.d/10-master.conf")
+    .with(
+      user: 'root',
+      group: 'root',
+      mode: 0644
+    )
   end
 
   it 'restart dovecot service' do
