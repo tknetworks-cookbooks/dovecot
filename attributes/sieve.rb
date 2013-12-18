@@ -1,5 +1,5 @@
 #
-# Author:: TANABE Ken-ichi (<nabeken@tknetworks.org>)
+# Author:: Ken-ichi TANABE (<nabeken@tknetworks.org>)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,8 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-default['dovecot']['dir'] = '/etc/dovecot'
-default['dovecot']['conf_cookbook'] = 'dovecot'
-default['dovecot']['conf_cookbook_by_name'] = []
-default['dovecot']['tls_ca_cert_file'] = nil
-default['dovecot']['mail_plugins'] = []
+default['dovecot']['conf']['sieve']['user_path'] = '~/.dovecot.sieve'
+default['dovecot']['conf']['sieve']['global_path'] = nil
+default['dovecot']['conf']['sieve']['global_dir'] = nil
+default['dovecot']['conf']['sieve']['dir'] = '~/sieve'
+default['dovecot']['conf']['sieve']['user'] = 'root'
+default['dovecot']['conf']['sieve']['group'] = 'root'

@@ -1,5 +1,5 @@
 #
-# Author:: TANABE Ken-ichi (<nabeken@tknetworks.org>)
+# Author:: Ken-ichi TANABE (<nabeken@tknetworks.org>)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,10 +13,3 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-require 'minitest/spec'
-
-describe_recipe 'dovecot::default' do
-  it "installs dovecot package" do
-    package("dovecot-core").must_be_installed
-  end
-end

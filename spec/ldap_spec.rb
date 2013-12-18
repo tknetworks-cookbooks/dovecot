@@ -59,6 +59,13 @@ describe 'dovecot::ldap' do
     ].each do |l|
       expect(chef_run).to render_file("#{chef_run.node['dovecot']['dir']}/dovecot-ldap.conf.ext")
       .with_content(l)
+
+      expect(chef_run).to create_template("#{chef_run.node['dovecot']['dir']}/dovecot-ldap.conf.ext")
+      .with(
+        user: 'root',
+        group: 'root',
+        mode: 0644
+      )
     end
   end
 end

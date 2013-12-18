@@ -27,7 +27,9 @@
 #
 # <doc/wiki/MailLocation.txt>
 #
-mail_location = mbox:~/mail:INBOX=/var/mail/%u
+<% if node['dovecot']['conf']['mail']['mail_location'] -%>
+mail_location = <%= node['dovecot']['conf']['mail']['mail_location'] %>
+<% end -%>
 
 # If you need to set multiple mailbox locations or want to change default
 # namespace settings, you can do it by defining namespace sections.
@@ -103,8 +105,12 @@ namespace inbox {
 # System user and group used to access mails. If you use multiple, userdb
 # can override these by returning uid or gid fields. You can use either numbers
 # or names. <doc/wiki/UserIds.txt>
-#mail_uid =
-#mail_gid =
+<% if node['dovecot']['conf']['mail']['mail_uid'] -%>
+mail_uid = <%= node['dovecot']['conf']['mail']['mail_uid'] %>
+<% end -%>
+<% if node['dovecot']['conf']['mail']['mail_gid'] -%>
+mail_gid = <%= node['dovecot']['conf']['mail']['mail_gid'] %>
+<% end -%>
 
 # Group to enable temporarily for privileged operations. Currently this is
 # used only with INBOX when either its initial creation or dotlocking fails.
@@ -201,7 +207,9 @@ namespace inbox {
 
 # Space separated list of plugins to load for all services. Plugins specific to
 # IMAP, LDA, etc. are added to this list in their own .conf files.
-#mail_plugins = 
+<% unless node['dovecot']['mail_plugins'].empty? -%>
+mail_plugins = <%= node['dovecot']['mail_plugins'].join(' ') %>
+<% end -%>
 
 ##
 ## Mailbox handling optimizations

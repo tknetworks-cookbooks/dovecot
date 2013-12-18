@@ -13,8 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-default['dovecot']['dir'] = '/etc/dovecot'
-default['dovecot']['conf_cookbook'] = 'dovecot'
-default['dovecot']['conf_cookbook_by_name'] = []
-default['dovecot']['tls_ca_cert_file'] = nil
-default['dovecot']['mail_plugins'] = []
+require 'serverspec'
+include Serverspec::Helper::Exec
+include Serverspec::Helper::DetectOS
+
+RSpec.configure do |c|
+  c.before :all do
+    c.path = '/sbin:/usr/sbin'
+  end
+end

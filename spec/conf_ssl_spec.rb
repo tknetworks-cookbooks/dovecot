@@ -29,11 +29,20 @@ describe 'dovecot::conf_ssl' do
   }
 
   before do
+    chef_run.node.set['dovecot']['conf']['ssl'] = 'required'
     chef_run.converge('dovecot::conf_ssl')
   end
 
   it "configures ssl.conf" do
+    expect(chef_run).to render_file("#{chef_run.node['dovecot']['dir']}/conf.d/10-ssl.conf")
+    .with_content('ssl = required')
+
     expect(chef_run).to create_template("#{chef_run.node['dovecot']['dir']}/conf.d/10-ssl.conf")
+    .with(
+      user: 'root',
+      group: 'root',
+      mode: 0644
+    )
   end
 
   it 'restart dovecot service' do

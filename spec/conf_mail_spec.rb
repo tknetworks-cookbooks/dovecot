@@ -29,11 +29,26 @@ describe 'dovecot::conf_mail' do
   }
 
   before do
+    chef_run.node.set['dovecot']['conf']['mail']['mail_location'] = '/home/mail'
+    chef_run.node.set['dovecot']['conf']['mail']['mail_uid'] = 5000
+    chef_run.node.set['dovecot']['conf']['mail']['mail_gid'] = 5100
     chef_run.converge('dovecot::conf_mail')
   end
 
   it "configures mail.conf" do
-    expect(chef_run).to create_template("#{chef_run.node['dovecot']['dir']}/conf.d/10-mail.conf")
+    ['mail_location = /home/mail',
+     'mail_uid = 5000',
+     'mail_gid = 5100'].each do |l|
+      expect(chef_run).to render_file("#{chef_run.node['dovecot']['dir']}/conf.d/10-mail.conf")
+      .with_content(l)
+
+      expect(chef_run).to create_template("#{chef_run.node['dovecot']['dir']}/conf.d/10-mail.conf")
+      .with(
+        user: 'root',
+        group: 'root',
+        mode: 0644
+      )
+    end
   end
 
   it 'restart dovecot service' do

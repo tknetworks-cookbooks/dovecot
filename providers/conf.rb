@@ -26,23 +26,12 @@ action :create do
       group 'root'
       mode 0644
       source "conf.d/#{new_resource.name}.conf.erb"
-      cookbook node['dovecot']['conf_cookbook']
+      if node['dovecot']['conf_cookbook_by_name'].include?(new_resource.name)
+        cookbook node['dovecot']['conf_cookbook']
+      end
     end
   end
-
-  retried = false
-  begin
-    res.run_action(:create)
-  rescue
-    if retried
-      raise
-    else
-      Chef::Log.info "cookbook #{node['dovecot']['conf_cookbook']} has no template for #{res.path}. falling back to dovecot's template"
-      res.cookbook = 'dovecot'
-      retried = true
-      retry
-    end
-  end
+  res.run_action(:create)
   new_resource.updated_by_last_action(res.updated_by_last_action?)
 end
 
