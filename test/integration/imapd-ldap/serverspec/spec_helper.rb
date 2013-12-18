@@ -13,10 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-require 'minitest/spec'
+require 'serverspec'
+include Serverspec::Helper::Exec
+include Serverspec::Helper::DetectOS
 
-describe_recipe 'dovecot::default' do
-  it "installs dovecot package" do
-    package("dovecot-core").must_be_installed
+RSpec.configure do |c|
+  c.before :all do
+    c.path = '/sbin:/usr/sbin'
   end
 end

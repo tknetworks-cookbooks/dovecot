@@ -13,14 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-require 'minitest/spec'
+require 'spec_helper'
 
-describe_recipe 'dovecot::ldap' do
+describe 'dovecot::default' do
   it "installs dovecot package" do
-    package("dovecot-ldap").must_be_installed
+    expect(package("dovecot-core")).to be_installed
   end
 
-  it "configures dovecot-ldap" do
+  describe file("/etc/dovecot/dovecot-ldap.conf.ext") do
     [
       "uris = ldaps://ldap.example.org",
       "tls = no",
@@ -34,8 +34,9 @@ describe_recipe 'dovecot::ldap' do
       "pass_attrs = uid=user,userPassword=password",
       "pass_filter = (&(objectClass=posixAccount)(uid=%u))",
     ].each do |l|
-      file("#{node['dovecot']['dir']}/dovecot-ldap.conf.ext")
-      .must_include(l)
+      its(:content) {
+        should include l
+      }
     end
   end
 end
